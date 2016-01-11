@@ -1,0 +1,6 @@
+dactyl/
+amo.key
+amo.secret
+github.token
+__pycache__
+*.sw?
