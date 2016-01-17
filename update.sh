@@ -65,11 +65,14 @@ make -C pentadactyl xpi
 cd downloads
 mv pentadactyl*.xpi pentadactyl.xpi
 
+# Get max Firefox version
+max_fx_version="$(python "${DIR}"/max_firefox_version.py)"
+
 # Set version string in install.rdf
 unzip pentadactyl.xpi install.rdf
 sed -i -e 's/em:version=".*"/em:version="'"$version"'"/' install.rdf
 # Set max version in some reasonable way
-sed -i -e 's/em:maxVersion=".*"/em:maxVersion="46.0"/' install.rdf
+sed -i -e 's/em:maxVersion=".*"/em:maxVersion="'"$max_fx_version"'"/' install.rdf
 zip -u pentadactyl.xpi install.rdf
 rm install.rdf
 
@@ -80,6 +83,7 @@ python "${DIR}/amo_xpi_sign.py" -k "$amo_key" -s "$amo_secret" -x pentadactyl.xp
 # Update update.rdf file
 sed -e 's#<em:updateLink>.*</em:updateLink>#<em:updateLink>'"https://github.com/willsALMANJ/pentadactyl-signed/releases/download/$version/$signed_xpi"'</em:updateLink>#' \
     -e 's#em:version>.*</em#em:version>'"$version"'</em#' \
+    -e 's#em:maxVersion>.*</em#em:maxVersion>'"$max_fx_version"'</em#' \
 	-i "${DIR}/update.rdf"
 
 # Push new update.rdf to GitHub

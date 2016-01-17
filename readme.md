@@ -30,6 +30,3 @@ packages:
 ## TODO
 * Encapsulate repo specific references, so anyone else could easily fork this
   and run their own version.
-
-* Pull the maximum Firefox version from the internet and udpate `install.rdf`
-  and `update.rdf` with it.
