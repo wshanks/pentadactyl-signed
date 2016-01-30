@@ -78,7 +78,8 @@ sed -i -e 's/em:version=".*"/em:version="'"$version"'"/' install.rdf
 zip -u pentadactyl.xpi install.rdf
 rm install.rdf
 
-# Sign xpi
+# Sign xpi with jpm
+# Python wrapper makes sure the signed xpi file ends up at a known location
 signed_xpi="pentadactyl-signed-$version.xpi"
 python "${DIR}/amo_xpi_sign.py" -k "$amo_key" -s "$amo_secret" -x pentadactyl.xpi -o "$signed_xpi"
 
