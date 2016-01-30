@@ -41,7 +41,7 @@ def sign(xpi, key, secret, output=None):
 
     stdout = proc.stdout.splitlines()
 
-    if re.match('JPM [info] SUCCESS', stdout[-1]):
+    if re.match(r'JPM \[info\] SUCCESS', stdout[-1]):
         signed_xpi = re.match(r'JPM \[info\]\s+(.*\.xpi)', stdout[-2]).group(1)
         if output:
             shutil.move(signed_xpi, output)
