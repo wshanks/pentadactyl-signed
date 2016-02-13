@@ -51,7 +51,6 @@ hg update
 
 # Get version number and exit if no changes
 version="$(hg log -r . --template '{rev}')"
-version=7265b
 if [ "$last_version" = "$version" ]; then
 	exit 0
 fi
