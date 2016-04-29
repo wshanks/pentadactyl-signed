@@ -51,6 +51,8 @@ hg update
 
 # Get version number and exit if no changes
 version="$(hg log -r . --template '{rev}')"
+# Special version to merge in fix from alternate repo
+version="7267b"
 if [ "$last_version" = "$version" ]; then
 	exit 0
 fi
