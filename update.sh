@@ -39,6 +39,9 @@ last_version="$(git tag -l --sort=v:refname | tail -1)"
 amo_secret="$(cat amo.secret)"
 amo_key="$(cat amo.key)"
 github_token="$(cat github.token)"
+addon_id="$(cat addon_id.txt)"
+github_user="$(cat github_user.txt)"
+github_repo="$(cat github_repo.txt)"
 
 # Update dactyl source
 cd dactyl
@@ -52,10 +55,14 @@ if [ "$last_version" = "$version" ]; then
 	exit 0
 fi
 
-# Modify install.rdf to change id and update URL
-sed -e 's/em:id="pentadactyl@dactyl.googlecode.com"/em:id="pentadactyl-signed@willsalmanj.github.com"/' \
-	-e 's#\(em:homepageURL.*\)#\1\n        em:updateURL="https://raw.githubusercontent.com/willsalmanj/pentadactyl-signed/master/update.rdf"#' \
+# Get max Firefox version
+max_fx_version="$(python "${DIR}"/max_firefox_version.py)"
+
+# Modify install.rdf to change id, update URL, and max Firefox version
+sed -e 's/em:id="pentadactyl@dactyl.googlecode.com"/em:id="'"$addon_id"'"/' \
+	-e 's#\(em:homepageURL.*\)#\1\n        em:updateURL="https://raw.githubusercontent.com/'"$github_user"'/'"github_repo"'/master/update.rdf"#' \
 	-e 's#\(em:name.*\)#em:name="PentadactylSigned"#' \
+     -e 's/em:maxVersion=".*"/em:maxVersion="'"$max_fx_version"'"/' \
 	-i pentadactyl/install.rdf
 
 # Build xpi
@@ -65,14 +72,9 @@ make -C pentadactyl xpi
 cd downloads
 mv pentadactyl*.xpi pentadactyl.xpi
 
-# Get max Firefox version
-max_fx_version="$(python "${DIR}"/max_firefox_version.py)"
-
 # Set version string in install.rdf
 unzip pentadactyl.xpi install.rdf
 sed -i -e 's/em:version=".*"/em:version="'"$version"'"/' install.rdf
-# Set max version in some reasonable way
-sed -i -e 's/em:maxVersion=".*"/em:maxVersion="'"$max_fx_version"'"/' install.rdf
 zip -u pentadactyl.xpi install.rdf
 rm install.rdf
 
@@ -81,7 +83,7 @@ signed_xpi="pentadactyl-signed-$version.xpi"
 python "${DIR}/amo_xpi_sign.py" -k "$amo_key" -s "$amo_secret" -x pentadactyl.xpi -o "$signed_xpi"
 
 # Update update.rdf file
-sed -e 's#<em:updateLink>.*</em:updateLink>#<em:updateLink>'"https://github.com/willsALMANJ/pentadactyl-signed/releases/download/$version/$signed_xpi"'</em:updateLink>#' \
+sed -e 's#<em:updateLink>.*</em:updateLink>#<em:updateLink>'"https://github.com/'"$github_user"'/'"$github_repo"'/releases/download/$version/$signed_xpi"'</em:updateLink>#' \
     -e 's#em:version>.*</em#em:version>'"$version"'</em#' \
     -e 's#em:maxVersion>.*</em#em:maxVersion>'"$max_fx_version"'</em#' \
 	-i "${DIR}/update.rdf"
@@ -92,6 +94,6 @@ git tag "$version"
 git push --tags
 
 # Upload xpi to GitHub as new release
-python "${DIR}/github_release.py" --token "$github_token" --user willsALMANJ \
-	--repo pentadactyl-signed --version "$version" --file "$signed_xpi" \
+python "${DIR}/github_release.py" --token "$github_token" --user "$github_user" \
+	--repo "$github_repo" --version "$version" --file "$signed_xpi" \
 	--content-type application/x-xpinstall

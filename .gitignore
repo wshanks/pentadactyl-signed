@@ -2,5 +2,8 @@ dactyl/
 amo.key
 amo.secret
 github.token
+addon_id.txt
+github_user.txt
+github_repo.txt
 __pycache__
 *.sw?
