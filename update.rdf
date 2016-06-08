@@ -6,13 +6,13 @@
             <rdf:Seq>
                 <rdf:li>
                     <rdf:Description>
-                        <em:version>7237</em:version>
+                        <em:version>7262</em:version>
                         <em:targetApplication>
                             <rdf:Description>
                                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
                                 <em:minVersion>34.0</em:minVersion>
                                 <em:maxVersion>46.*</em:maxVersion>
-                                <em:updateLink>https://github.com/willsALMANJ/pentadactyl-signed/releases/download/7237/pentadactyl-signed-7237.xpi</em:updateLink>
+                                <em:updateLink>https://github.com/willsALMANJ/pentadactyl-signed/releases/download/7262/pentadactyl-signed-7262.xpi</em:updateLink>
                             </rdf:Description>
                         </em:targetApplication>
                     </rdf:Description>
