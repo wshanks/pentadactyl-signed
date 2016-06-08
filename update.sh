@@ -67,10 +67,10 @@ sed -e 's/em:id="pentadactyl@dactyl.googlecode.com"/em:id="'"$addon_id"'"/' \
 
 # Build xpi
 mkdir -p downloads
-# rm -rf downloads/*
-# make -C pentadactyl xpi
+rm -rf downloads/*
+make -C pentadactyl xpi
 cd downloads
-# mv pentadactyl*.xpi pentadactyl.xpi
+mv pentadactyl*.xpi pentadactyl.xpi
 
 # Set version string in install.rdf
 unzip pentadactyl.xpi install.rdf
@@ -81,7 +81,7 @@ rm install.rdf
 # Sign xpi with jpm
 # Python wrapper makes sure the signed xpi file ends up at a known location
 signed_xpi="pentadactyl-signed-$version.xpi"
-# python "${DIR}/amo_xpi_sign.py" -k "$amo_key" -s "$amo_secret" -x pentadactyl.xpi -o "$signed_xpi"
+python "${DIR}/amo_xpi_sign.py" -k "$amo_key" -s "$amo_secret" -x pentadactyl.xpi -o "$signed_xpi"
 
 # Update update.rdf file
 sed -e 's#<em:updateLink>.*</em:updateLink>#<em:updateLink>'"https://github.com/'"$github_user"'/'"$github_repo"'/releases/download/$version/$signed_xpi"'</em:updateLink>#' \
@@ -91,6 +91,7 @@ sed -e 's#<em:updateLink>.*</em:updateLink>#<em:updateLink>'"https://github.com/
 
 # Push new update.rdf to GitHub
 git commit -a -m "$version"
+git push
 git tag "$version"
 git push --tags
 
