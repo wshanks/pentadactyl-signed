@@ -60,7 +60,7 @@ max_fx_version="$(python "${DIR}"/max_firefox_version.py)"
 
 # Modify install.rdf to change id, update URL, and max Firefox version
 sed -e 's/em:id="pentadactyl@dactyl.googlecode.com"/em:id="'"$addon_id"'"/' \
-	-e 's#\(em:homepageURL.*\)#\1\n        em:updateURL="https://raw.githubusercontent.com/'"$github_user"'/'"github_repo"'/master/update.rdf"#' \
+	-e 's#\(em:homepageURL.*\)#\1\n        em:updateURL="https://raw.githubusercontent.com/'"$github_user"'/'"$github_repo"'/master/update.rdf"#' \
 	-e 's#\(em:name.*\)#em:name="PentadactylSigned"#' \
      -e 's/em:maxVersion=".*"/em:maxVersion="'"$max_fx_version"'"/' \
 	-i pentadactyl/install.rdf
