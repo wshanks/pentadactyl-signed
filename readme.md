@@ -13,11 +13,11 @@ are enabled.
 
 ## Signing and publishing your own `.xpi` files
 ### External dependencies
-Scripts require `bash` and `python` (version 3) as well as these Python
-packages:
+Scripts require `bash`, `python` (version 3.5 or greater), and `jpm` (version
+1.0.5 or greater) as well as these Python packages:
 * beautifulsoup4
-* lxml
-* requests-jwt
+* requests
+* uritemplate
 
 ### Setup
 * A user account on (addons.mozilla.org) and GitHub account and new GitHub repo
