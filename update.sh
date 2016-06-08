@@ -67,7 +67,7 @@ sed -e 's/em:id="pentadactyl@dactyl.googlecode.com"/em:id="'"$addon_id"'"/' \
 
 # Build xpi
 mkdir -p downloads
-rm -r downloads/*
+rm -rf downloads/*
 make -C pentadactyl xpi
 cd downloads
 mv pentadactyl*.xpi pentadactyl.xpi
