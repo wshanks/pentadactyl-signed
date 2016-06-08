@@ -92,7 +92,6 @@ def sign(xpi, key, secret, addon_id=None, version=None, output=None):
     req = requests.put(url, auth=auth,
                        files={'upload': open(xpi, 'rb')})
     # Stop for any error other than addon already being uploaded
-    print(req.json())
     if req.status_code != 409:
         req.raise_for_status()
         url = req.json()['url']
