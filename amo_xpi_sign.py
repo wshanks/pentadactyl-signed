@@ -47,6 +47,9 @@ def sign(xpi, key, secret, output=None):
             shutil.move(signed_xpi, output)
             signed_xpi = output
     else:
+        import pickle
+        with open('stdout.pickle', 'wb') as f_out:
+            pickle.dump(stdout, f_out)
         raise RuntimeError(proc.stdout)
 
     return signed_xpi
