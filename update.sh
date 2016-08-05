@@ -51,6 +51,9 @@ hg update
 
 # Get version number and exit if no changes
 version="$(hg log -r . --template '{rev}')"
+# TODO: remove hard-coded version. Needed because switching repos resulted in a
+# lower rev number
+version=7286
 if [ "$last_version" = "$version" ]; then
 	exit 0
 fi
@@ -66,22 +69,22 @@ sed -e 's/em:id="pentadactyl@dactyl.googlecode.com"/em:id="'"$addon_id"'"/' \
 	-i pentadactyl/install.rdf
 
 # Build xpi
-mkdir -p downloads
-rm -rf downloads/*
-make -C pentadactyl xpi
-cd downloads
-mv pentadactyl*.xpi pentadactyl.xpi
-
-# Set version string in install.rdf
-unzip pentadactyl.xpi install.rdf
-sed -i -e 's/em:version=".*"/em:version="'"$version"'"/' install.rdf
-zip -u pentadactyl.xpi install.rdf
-rm install.rdf
-
-# Sign xpi with jpm
-# Python wrapper makes sure the signed xpi file ends up at a known location
-signed_xpi="pentadactyl-signed-$version.xpi"
-python "${DIR}/amo_xpi_sign.py" -k "$amo_key" -s "$amo_secret" -x pentadactyl.xpi -o "$signed_xpi"
+# mkdir -p downloads
+# rm -rf downloads/*
+# make -C pentadactyl xpi
+# cd downloads
+# mv pentadactyl*.xpi pentadactyl.xpi
+#
+# # Set version string in install.rdf
+# unzip pentadactyl.xpi install.rdf
+# sed -i -e 's/em:version=".*"/em:version="'"$version"'"/' install.rdf
+# zip -u pentadactyl.xpi install.rdf
+# rm install.rdf
+#
+# # Sign xpi with jpm
+# # Python wrapper makes sure the signed xpi file ends up at a known location
+# signed_xpi="pentadactyl-signed-$version.xpi"
+# python "${DIR}/amo_xpi_sign.py" -k "$amo_key" -s "$amo_secret" -x pentadactyl.xpi -o "$signed_xpi"
 
 # Update update.rdf file
 sed -e 's#<em:updateLink>.*</em:updateLink>#<em:updateLink>https://github.com/'"$github_user"'/'"$github_repo"'/releases/download/'"$version"'/'"$signed_xpi"'</em:updateLink>#' \
