@@ -51,9 +51,6 @@ hg update
 
 # Get version number and exit if no changes
 version="$(hg log -r . --template '{rev}')"
-# TODO: remove hard-coded version. Needed because switching repos resulted in a
-# lower rev number
-version=7296
 if [ "$last_version" = "$version" ]; then
 	exit 0
 fi
