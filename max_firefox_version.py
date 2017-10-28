@@ -45,8 +45,10 @@ def main():
     for version in version_list:
         # Match newest version without prerelease characters in string
         if re.match(r'^[0-9\.]+$', version):
-            print(version)
-            return
+            if int(version.split('.')[0]) < 57:
+                # Get the latest release lest than 57
+                print(version)
+                return
 
     raise RuntimeError('No version strings found')
 

@@ -35,7 +35,7 @@ cd "$DIR"
 
 
 # Set up variables
-last_version="$(git tag -l --sort=v:refname | tail -1)"
+last_version="$(git tag | egrep '^[0-9]{4}[0-9]*$' | sort -n | tail -1)"
 amo_secret="$(cat amo.secret)"
 amo_key="$(cat amo.key)"
 github_token="$(cat github.token)"
@@ -45,18 +45,17 @@ github_repo="$(cat github_repo.txt)"
 
 # Update dactyl source
 cd dactyl
-hg revert --all
-hg pull
-hg update
+# git reset --hard
+# git checkout master
+# git pull
 
-# Get version number and exit if no changes
-version="$(hg log -r . --template '{rev}')"
-if [ "$last_version" = "$version" ]; then
-	exit 0
-fi
+# New version number
+version=$(expr $last_version + 1)
+version=7310
 
 # Get max Firefox version
 max_fx_version="$(python "${DIR}"/max_firefox_version.py)"
+max_fx_version='56.*'
 
 # Modify install.rdf to change id, update URL, and max Firefox version
 sed -e 's/em:id="pentadactyl@dactyl.googlecode.com"/em:id="'"$addon_id"'"/' \
@@ -90,6 +89,7 @@ sed -e 's#<em:updateLink>.*</em:updateLink>#<em:updateLink>https://github.com/'"
 	-i "${DIR}/update.rdf"
 
 # Push new update.rdf to GitHub
+cd "${DIR}"
 git commit -a -m "$version"
 git push
 git tag "$version"
